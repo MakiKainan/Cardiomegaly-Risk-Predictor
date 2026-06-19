@@ -1,0 +1,6 @@
+{
+  "name": "Cardiovascular Risk Prediction AI",
+  "description": "Comparative study of DenseNet-121 and ViT-B/16 with LIME and SHAP for cardiomegaly detection in elderly chest radiographs.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

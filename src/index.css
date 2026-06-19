@@ -1,0 +1,154 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --color-navy-deep: #0A1628;
+  --color-navy-surface: #0F2044;
+  --color-accent-blue: #1E6FD9;
+  --color-accent-light: #2A7FEF;
+  --color-text-secondary: #A8BFDA;
+}
+
+body {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 500;
+  background-color: #0A1628;
+  color: #FFFFFF;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Force Helvetica Neue Medium everywhere — overrides every Tailwind font /
+   weight utility (font-bold, font-mono, etc.). Drop this rule to get the
+   typographic hierarchy back. */
+* {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+  font-weight: 500 !important;
+}
+
+.liquid-glass {
+  background: rgba(0, 0, 0, 0.4);
+  background-blend-mode: luminosity;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border: none;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.liquid-glass::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1.4px;
+  background: linear-gradient(180deg,
+    rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.1) 20%,
+    rgba(255,255,255,0) 40%, rgba(255,255,255,0) 60%,
+    rgba(255,255,255,0.1) 80%, rgba(255,255,255,0.3) 100%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.bg-medical-mesh {
+  background-image: radial-gradient(circle at 70% 30%,rgba(30,111,217,0.15) 0%,transparent 50%),radial-gradient(circle at 20% 70%,rgba(30,111,217,0.1) 0%,transparent 40%);
+  background-size: cover;
+}
+
+.scanline {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg,transparent,rgba(30,111,217,0.2),transparent);
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+}
+
+/* ── Hero title: plain visible white text that cycles through a few accent
+   colours a couple of times after the entrance, then settles back to white.
+   (A background-clip:text sweep does NOT work here — the letters live in
+   nested inline-block spans, so the clipped gradient never paints through
+   them and the text goes invisible. Animating `color` is inherited by the
+   spans and stays visible.) ── */
+.hero-title-cycle {
+  color: #ffffff;
+  animation: hero-title-cycle 8s ease-in-out 2.6s 2 both;
+}
+@keyframes hero-title-cycle {
+  0%   { color: #ffffff; }
+  18%  { color: #2A7FEF; }
+  38%  { color: #22D3EE; }
+  58%  { color: #A78BFA; }
+  78%  { color: #F472B6; }
+  100% { color: #ffffff; }
+}
+
+/* ── Animated noise/rainbow ring border for the "oval" stat cards.
+   Uses ::after so it coexists with .liquid-glass (which owns ::before).
+   The conic gradient rotates, so the border colors keep shifting. ── */
+@property --noise-angle {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+.noise-border { position: relative; }
+.noise-border::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1.6px;
+  background: conic-gradient(from var(--noise-angle),
+    #2A7FEF, #22D3EE, #34D399, #A78BFA, #F472B6, #2A7FEF);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  opacity: 0.9;
+  animation: noise-spin 6s linear infinite;
+}
+@keyframes noise-spin {
+  to { --noise-angle: 360deg; }
+}
+
+/* ── Watery fill for the statistic bars: a flowing gradient body plus a
+   travelling caustic shimmer. Set --c1/--c2 per bar for its colour. ── */
+.water-fill {
+  position: relative;
+  overflow: hidden;
+  background-image: linear-gradient(90deg,
+    var(--c1, #1E6FD9), var(--c2, #2A7FEF), var(--c1, #1E6FD9));
+  background-size: 200% 100%;
+  animation: water-flow 2.6s linear infinite;
+}
+.water-fill::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg,
+    transparent, rgba(255, 255, 255, 0.4), transparent);
+  transform: translateX(-120%);
+  animation: water-shimmer 2.6s ease-in-out infinite;
+}
+@keyframes water-flow {
+  to { background-position: 200% 0; }
+}
+@keyframes water-shimmer {
+  0%        { transform: translateX(-120%); }
+  60%, 100% { transform: translateX(240%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-title-cycle,
+  .noise-border::after,
+  .water-fill,
+  .water-fill::after { animation: none; }
+  .hero-title-cycle { color: #fff; }
+}
