@@ -79,7 +79,8 @@ body {
    spans and stays visible.) ── */
 .hero-title-cycle {
   color: #ffffff;
-  animation: hero-title-cycle 8s ease-in-out 2.6s 2 both;
+  /* short delay so it replays promptly each time it scrolls back into view */
+  animation: hero-title-cycle 8s ease-in-out 0.6s 2 both;
 }
 @keyframes hero-title-cycle {
   0%   { color: #ffffff; }
@@ -143,6 +144,35 @@ body {
 @keyframes water-shimmer {
   0%        { transform: translateX(-120%); }
   60%, 100% { transform: translateX(240%); }
+}
+
+/* ── Interactive grid backdrop (demo page). Faint grid everywhere, with a
+   brighter grid revealed in a spotlight that tracks the cursor (--x/--y). ── */
+.ig-root {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+  background: #0A1628;
+}
+.ig-base,
+.ig-glow {
+  position: absolute;
+  inset: -2px;
+  background-image:
+    linear-gradient(rgba(30, 111, 217, 0.10) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(30, 111, 217, 0.10) 1px, transparent 1px);
+  background-size: 44px 44px;
+}
+.ig-glow {
+  background-image:
+    linear-gradient(rgba(42, 127, 239, 0.85) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(42, 127, 239, 0.85) 1px, transparent 1px);
+  -webkit-mask: radial-gradient(circle 200px at var(--x, 50%) var(--y, 50%),
+    #000 0%, rgba(0, 0, 0, 0.35) 45%, transparent 75%);
+  mask: radial-gradient(circle 200px at var(--x, 50%) var(--y, 50%),
+    #000 0%, rgba(0, 0, 0, 0.35) 45%, transparent 75%);
 }
 
 @media (prefers-reduced-motion: reduce) {

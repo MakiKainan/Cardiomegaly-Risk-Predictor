@@ -122,7 +122,7 @@ export default function TryDemoSection() {
   };
 
   return (
-    <section id="demo-section" className="bg-[#0D1E3A] px-6 md:px-12 lg:px-16 py-24">
+    <section id="demo-section" className="px-6 md:px-12 lg:px-16 py-24">
       <div className="max-w-5xl mx-auto">
         
         {/* Header Header */}
