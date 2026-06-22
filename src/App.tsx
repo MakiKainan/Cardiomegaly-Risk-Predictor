@@ -10,6 +10,8 @@ import FooterSection from './components/FooterSection';
 import GlowButton from './components/GlowButton';
 import MosaicWipe, { MOSAIC_COVER_MS } from './components/MosaicWipe';
 import InteractiveGrid from './components/InteractiveGrid';
+import { ThreeDMarquee } from './components/ThreeDMarquee';
+import { sampleImages } from './sampleImages';
 
 type View = 'landing' | 'demo';
 
@@ -17,7 +19,8 @@ export default function App() {
   const [view, setView] = useState<View>('landing');
   const [mosaic, setMosaic] = useState<'idle' | 'cover' | 'reveal'>('idle');
 
-  const defaultVideoUrl = 'https://assets.mixkit.co/videos/preview/mixkit-medical-analysis-on-a-computer-screen-40176-large.mp4';
+  // A handful of the sample X-rays for the hero marquee backdrop (not all 50).
+  const heroImages = sampleImages.slice(0, 24);
 
   // Swap pages behind a mosaic wipe: cover the screen, swap the view + scroll,
   // then reveal. Optional scrollId scrolls to a section once the new view is up.
@@ -51,27 +54,18 @@ export default function App() {
       {view === 'landing' ? (
         <>
           {/* SECTION 1 — HERO & VIDEO BACKGROUND */}
-          <section id="hero-viewport" className="relative min-h-screen flex flex-col justify-between">
-            {/* Full-screen Video Background */}
-            <video
-              id="hero-bg-video"
-              src={defaultVideoUrl}
-              autoPlay
-              loop
-              muted
-              playsInline
-              className="absolute inset-0 w-full h-full object-cover z-0 pointer-events-none select-none"
-              referrerPolicy="no-referrer"
-            />
+          <section id="hero-viewport" className="relative min-h-screen flex flex-col justify-between overflow-hidden">
+            {/* 3D marquee backdrop — a wall of sample X-rays drifting in perspective */}
+            <div id="hero-marquee" className="absolute inset-0 z-0">
+              <ThreeDMarquee images={heroImages} />
+            </div>
+
+            {/* Scrim so the title/nav stay legible over the busy marquee */}
+            <div className="absolute inset-0 z-[2] pointer-events-none bg-gradient-to-t from-[#0A1628] via-[#0A1628]/70 to-[#0A1628]/40" />
 
             {/* Immersive HUD background mesh and scanline overlay */}
             <div id="immersive-hud-overlay" className="absolute inset-0 bg-medical-mesh pointer-events-none z-[1]">
               <div className="scanline animate-[pulse_3s_infinite]" />
-              <svg className="absolute right-0 top-0 opacity-15 md:opacity-25 lg:opacity-30 mix-blend-screen" width="600" height="768" viewBox="0 0 400 600" fill="none">
-                <path d="M200 100 C150 100 100 150 100 250 C100 350 150 450 200 450 C250 450 300 350 300 250 C300 150 250 100 200 100" stroke="#1E6FD9" strokeWidth="2" strokeDasharray="4 4"/>
-                <circle cx="200" cy="280" r="60" stroke="#1E6FD9" strokeWidth="1" opacity="0.5"/>
-                <path d="M100 250 L300 250 M200 100 L200 450" stroke="#1E6FD9" strokeWidth="0.5" opacity="0.3"/>
-              </svg>
             </div>
 
             {/* Global Nav overlay */}

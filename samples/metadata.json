@@ -1,0 +1,452 @@
+[
+  {
+    "filename": "sample_000.png",
+    "true_label": "Normal",
+    "age": 74,
+    "cnn_prob": 0.0192,
+    "cnn_pred": "Normal",
+    "vit_prob": 0.029,
+    "vit_pred": "Normal"
+  },
+  {
+    "filename": "sample_001.png",
+    "true_label": "Normal",
+    "age": 61,
+    "cnn_prob": 0.0383,
+    "cnn_pred": "Normal",
+    "vit_prob": 0.073,
+    "vit_pred": "Normal"
+  },
+  {
+    "filename": "sample_002.png",
+    "true_label": "Normal",
+    "age": 60,
+    "cnn_prob": 0.0739,
+    "cnn_pred": "Normal",
+    "vit_prob": 0.0959,
+    "vit_pred": "Normal"
+  },
+  {
+    "filename": "sample_003.png",
+    "true_label": "Normal",
+    "age": 74,
+    "cnn_prob": 0.3709,
+    "cnn_pred": "Normal",
+    "vit_prob": 0.3265,
+    "vit_pred": "Normal"
+  },
+  {
+    "filename": "sample_004.png",
+    "true_label": "Normal",
+    "age": 68,
+    "cnn_prob": 0.315,
+    "cnn_pred": "Normal",
+    "vit_prob": 0.0557,
+    "vit_pred": "Normal"
+  },
+  {
+    "filename": "sample_005.png",
+    "true_label": "Normal",
+    "age": 81,
+    "cnn_prob": 0.0038,
+    "cnn_pred": "Normal",
+    "vit_prob": 0.0505,
+    "vit_pred": "Normal"
+  },
+  {
+    "filename": "sample_006.png",
+    "true_label": "Normal",
+    "age": 62,
+    "cnn_prob": 0.522,
+    "cnn_pred": "Cardiomegaly",
+    "vit_prob": 0.3116,
+    "vit_pred": "Normal"
+  },
+  {
+    "filename": "sample_007.png",
+    "true_label": "Normal",
+    "age": 67,
+    "cnn_prob": 0.0935,
+    "cnn_pred": "Normal",
+    "vit_prob": 0.5694,
+    "vit_pred": "Cardiomegaly"
+  },
+  {
+    "filename": "sample_008.png",
+    "true_label": "Normal",
+    "age": 61,
+    "cnn_prob": 0.0051,
+    "cnn_pred": "Normal",
+    "vit_prob": 0.0202,
+    "vit_pred": "Normal"
+  },
+  {
+    "filename": "sample_009.png",
+    "true_label": "Normal",
+    "age": 60,
+    "cnn_prob": 0.5659,
+    "cnn_pred": "Cardiomegaly",
+    "vit_prob": 0.2909,
+    "vit_pred": "Normal"
+  },
+  {
+    "filename": "sample_010.png",
+    "true_label": "Normal",
+    "age": 64,
+    "cnn_prob": 0.0072,
+    "cnn_pred": "Normal",
+    "vit_prob": 0.0238,
+    "vit_pred": "Normal"
+  },
+  {
+    "filename": "sample_011.png",
+    "true_label": "Normal",
+    "age": 62,
+    "cnn_prob": 0.0551,
+    "cnn_pred": "Normal",
+    "vit_prob": 0.3296,
+    "vit_pred": "Normal"
+  },
+  {
+    "filename": "sample_012.png",
+    "true_label": "Normal",
+    "age": 66,
+    "cnn_prob": 0.0307,
+    "cnn_pred": "Normal",
+    "vit_prob": 0.1088,
+    "vit_pred": "Normal"
+  },
+  {
+    "filename": "sample_013.png",
+    "true_label": "Normal",
+    "age": 66,
+    "cnn_prob": 0.3599,
+    "cnn_pred": "Normal",
+    "vit_prob": 0.0915,
+    "vit_pred": "Normal"
+  },
+  {
+    "filename": "sample_014.png",
+    "true_label": "Normal",
+    "age": 69,
+    "cnn_prob": 0.1063,
+    "cnn_pred": "Normal",
+    "vit_prob": 0.0224,
+    "vit_pred": "Normal"
+  },
+  {
+    "filename": "sample_015.png",
+    "true_label": "Normal",
+    "age": 61,
+    "cnn_prob": 0.0028,
+    "cnn_pred": "Normal",
+    "vit_prob": 0.0106,
+    "vit_pred": "Normal"
+  },
+  {
+    "filename": "sample_016.png",
+    "true_label": "Normal",
+    "age": 76,
+    "cnn_prob": 0.0878,
+    "cnn_pred": "Normal",
+    "vit_prob": 0.0401,
+    "vit_pred": "Normal"
+  },
+  {
+    "filename": "sample_017.png",
+    "true_label": "Normal",
+    "age": 66,
+    "cnn_prob": 0.5607,
+    "cnn_pred": "Cardiomegaly",
+    "vit_prob": 0.1835,
+    "vit_pred": "Normal"
+  },
+  {
+    "filename": "sample_018.png",
+    "true_label": "Normal",
+    "age": 62,
+    "cnn_prob": 0.3348,
+    "cnn_pred": "Normal",
+    "vit_prob": 0.6039,
+    "vit_pred": "Cardiomegaly"
+  },
+  {
+    "filename": "sample_019.png",
+    "true_label": "Normal",
+    "age": 64,
+    "cnn_prob": 0.0019,
+    "cnn_pred": "Normal",
+    "vit_prob": 0.0089,
+    "vit_pred": "Normal"
+  },
+  {
+    "filename": "sample_020.png",
+    "true_label": "Normal",
+    "age": 65,
+    "cnn_prob": 0.5338,
+    "cnn_pred": "Cardiomegaly",
+    "vit_prob": 0.7859,
+    "vit_pred": "Cardiomegaly"
+  },
+  {
+    "filename": "sample_021.png",
+    "true_label": "Normal",
+    "age": 66,
+    "cnn_prob": 0.8829,
+    "cnn_pred": "Cardiomegaly",
+    "vit_prob": 0.8984,
+    "vit_pred": "Cardiomegaly"
+  },
+  {
+    "filename": "sample_022.png",
+    "true_label": "Normal",
+    "age": 63,
+    "cnn_prob": 0.6054,
+    "cnn_pred": "Cardiomegaly",
+    "vit_prob": 0.3063,
+    "vit_pred": "Normal"
+  },
+  {
+    "filename": "sample_023.png",
+    "true_label": "Normal",
+    "age": 69,
+    "cnn_prob": 0.8263,
+    "cnn_pred": "Cardiomegaly",
+    "vit_prob": 0.949,
+    "vit_pred": "Cardiomegaly"
+  },
+  {
+    "filename": "sample_024.png",
+    "true_label": "Normal",
+    "age": 76,
+    "cnn_prob": 0.8036,
+    "cnn_pred": "Cardiomegaly",
+    "vit_prob": 0.957,
+    "vit_pred": "Cardiomegaly"
+  },
+  {
+    "filename": "sample_025.png",
+    "true_label": "Cardiomegaly",
+    "age": 67,
+    "cnn_prob": 0.6188,
+    "cnn_pred": "Cardiomegaly",
+    "vit_prob": 0.6307,
+    "vit_pred": "Cardiomegaly"
+  },
+  {
+    "filename": "sample_026.png",
+    "true_label": "Cardiomegaly",
+    "age": 80,
+    "cnn_prob": 0.856,
+    "cnn_pred": "Cardiomegaly",
+    "vit_prob": 0.8616,
+    "vit_pred": "Cardiomegaly"
+  },
+  {
+    "filename": "sample_027.png",
+    "true_label": "Cardiomegaly",
+    "age": 65,
+    "cnn_prob": 0.4651,
+    "cnn_pred": "Normal",
+    "vit_prob": 0.7839,
+    "vit_pred": "Cardiomegaly"
+  },
+  {
+    "filename": "sample_028.png",
+    "true_label": "Cardiomegaly",
+    "age": 65,
+    "cnn_prob": 0.5091,
+    "cnn_pred": "Cardiomegaly",
+    "vit_prob": 0.8119,
+    "vit_pred": "Cardiomegaly"
+  },
+  {
+    "filename": "sample_029.png",
+    "true_label": "Cardiomegaly",
+    "age": 65,
+    "cnn_prob": 0.6571,
+    "cnn_pred": "Cardiomegaly",
+    "vit_prob": 0.7771,
+    "vit_pred": "Cardiomegaly"
+  },
+  {
+    "filename": "sample_030.png",
+    "true_label": "Cardiomegaly",
+    "age": 77,
+    "cnn_prob": 0.912,
+    "cnn_pred": "Cardiomegaly",
+    "vit_prob": 0.9402,
+    "vit_pred": "Cardiomegaly"
+  },
+  {
+    "filename": "sample_031.png",
+    "true_label": "Cardiomegaly",
+    "age": 65,
+    "cnn_prob": 0.9337,
+    "cnn_pred": "Cardiomegaly",
+    "vit_prob": 0.9363,
+    "vit_pred": "Cardiomegaly"
+  },
+  {
+    "filename": "sample_032.png",
+    "true_label": "Cardiomegaly",
+    "age": 74,
+    "cnn_prob": 0.8263,
+    "cnn_pred": "Cardiomegaly",
+    "vit_prob": 0.7753,
+    "vit_pred": "Cardiomegaly"
+  },
+  {
+    "filename": "sample_033.png",
+    "true_label": "Cardiomegaly",
+    "age": 66,
+    "cnn_prob": 0.1739,
+    "cnn_pred": "Normal",
+    "vit_prob": 0.313,
+    "vit_pred": "Normal"
+  },
+  {
+    "filename": "sample_034.png",
+    "true_label": "Cardiomegaly",
+    "age": 65,
+    "cnn_prob": 0.7955,
+    "cnn_pred": "Cardiomegaly",
+    "vit_prob": 0.8674,
+    "vit_pred": "Cardiomegaly"
+  },
+  {
+    "filename": "sample_035.png",
+    "true_label": "Cardiomegaly",
+    "age": 61,
+    "cnn_prob": 0.6779,
+    "cnn_pred": "Cardiomegaly",
+    "vit_prob": 0.8925,
+    "vit_pred": "Cardiomegaly"
+  },
+  {
+    "filename": "sample_036.png",
+    "true_label": "Cardiomegaly",
+    "age": 60,
+    "cnn_prob": 0.9041,
+    "cnn_pred": "Cardiomegaly",
+    "vit_prob": 0.7424,
+    "vit_pred": "Cardiomegaly"
+  },
+  {
+    "filename": "sample_037.png",
+    "true_label": "Cardiomegaly",
+    "age": 63,
+    "cnn_prob": 0.9005,
+    "cnn_pred": "Cardiomegaly",
+    "vit_prob": 0.9671,
+    "vit_pred": "Cardiomegaly"
+  },
+  {
+    "filename": "sample_038.png",
+    "true_label": "Cardiomegaly",
+    "age": 61,
+    "cnn_prob": 0.4114,
+    "cnn_pred": "Normal",
+    "vit_prob": 0.5446,
+    "vit_pred": "Cardiomegaly"
+  },
+  {
+    "filename": "sample_039.png",
+    "true_label": "Cardiomegaly",
+    "age": 60,
+    "cnn_prob": 0.3596,
+    "cnn_pred": "Normal",
+    "vit_prob": 0.4153,
+    "vit_pred": "Normal"
+  },
+  {
+    "filename": "sample_040.png",
+    "true_label": "Cardiomegaly",
+    "age": 78,
+    "cnn_prob": 0.959,
+    "cnn_pred": "Cardiomegaly",
+    "vit_prob": 0.9679,
+    "vit_pred": "Cardiomegaly"
+  },
+  {
+    "filename": "sample_041.png",
+    "true_label": "Cardiomegaly",
+    "age": 66,
+    "cnn_prob": 0.9381,
+    "cnn_pred": "Cardiomegaly",
+    "vit_prob": 0.876,
+    "vit_pred": "Cardiomegaly"
+  },
+  {
+    "filename": "sample_042.png",
+    "true_label": "Cardiomegaly",
+    "age": 75,
+    "cnn_prob": 0.8428,
+    "cnn_pred": "Cardiomegaly",
+    "vit_prob": 0.7824,
+    "vit_pred": "Cardiomegaly"
+  },
+  {
+    "filename": "sample_043.png",
+    "true_label": "Cardiomegaly",
+    "age": 62,
+    "cnn_prob": 0.1419,
+    "cnn_pred": "Normal",
+    "vit_prob": 0.446,
+    "vit_pred": "Normal"
+  },
+  {
+    "filename": "sample_044.png",
+    "true_label": "Cardiomegaly",
+    "age": 66,
+    "cnn_prob": 0.8212,
+    "cnn_pred": "Cardiomegaly",
+    "vit_prob": 0.9598,
+    "vit_pred": "Cardiomegaly"
+  },
+  {
+    "filename": "sample_045.png",
+    "true_label": "Cardiomegaly",
+    "age": 71,
+    "cnn_prob": 0.4657,
+    "cnn_pred": "Normal",
+    "vit_prob": 0.6946,
+    "vit_pred": "Cardiomegaly"
+  },
+  {
+    "filename": "sample_046.png",
+    "true_label": "Cardiomegaly",
+    "age": 79,
+    "cnn_prob": 0.5137,
+    "cnn_pred": "Cardiomegaly",
+    "vit_prob": 0.8982,
+    "vit_pred": "Cardiomegaly"
+  },
+  {
+    "filename": "sample_047.png",
+    "true_label": "Cardiomegaly",
+    "age": 65,
+    "cnn_prob": 0.5387,
+    "cnn_pred": "Cardiomegaly",
+    "vit_prob": 0.7159,
+    "vit_pred": "Cardiomegaly"
+  },
+  {
+    "filename": "sample_048.png",
+    "true_label": "Cardiomegaly",
+    "age": 64,
+    "cnn_prob": 0.8925,
+    "cnn_pred": "Cardiomegaly",
+    "vit_prob": 0.9385,
+    "vit_pred": "Cardiomegaly"
+  },
+  {
+    "filename": "sample_049.png",
+    "true_label": "Cardiomegaly",
+    "age": 71,
+    "cnn_prob": 0.6792,
+    "cnn_pred": "Cardiomegaly",
+    "vit_prob": 0.9467,
+    "vit_pred": "Cardiomegaly"
+  }
+]
