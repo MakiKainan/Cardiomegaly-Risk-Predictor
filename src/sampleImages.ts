@@ -6,6 +6,13 @@ const modules = import.meta.glob('../samples/*.png', {
   import: 'default',
 });
 
-export const sampleImages = Object.keys(modules)
-  .sort()
-  .map((k) => modules[k] as string);
+const keys = Object.keys(modules).sort();
+
+export const sampleImages = keys.map((k) => modules[k] as string);
+
+// Same images, but keep the original filename so the demo page can join each
+// sample to its precomputed row in samples/metadata.json.
+export const sampleEntries = keys.map((k) => ({
+  name: k.split('/').pop() as string, // e.g. "sample_000.png"
+  url: modules[k] as string,
+}));
