@@ -9,7 +9,7 @@ This is the companion site to the research notebook in the parent repo.
 - **Hero** — animated title over a medical-imaging backdrop.
 - **Research Overview** — the study, dataset, and headline metrics.
 - **Model Comparison** — CNN vs ViT across AUC-ROC, Accuracy, Precision, Recall, and F1, with animated bar charts.
-- **Explainability (XAI)** — interactive CNN/ViT attention-map simulation plus LIME and SHAP write-ups.
+- **Explainability (XAI)** — LIME and SHAP write-ups.
 - **Try the Demo** — drag-and-drop (or pick a sample) chest X-ray and get a side-by-side dual-model prediction. The inference is **simulated client-side** for demonstration; no images leave the browser.
 
 ## Results (test set)
