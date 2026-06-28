@@ -175,10 +175,57 @@ body {
     #000 0%, rgba(0, 0, 0, 0.35) 45%, transparent 75%);
 }
 
+/* Custom keyframes and animations for the X-ray scanning interface */
+.scan-beam {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, #2A7FEF, #22D3EE, #2A7FEF, transparent);
+  box-shadow: 0 0 15px rgba(42, 127, 239, 0.8), 0 0 5px rgba(34, 211, 238, 0.8);
+  animation: scan-sweep 2s ease-in-out infinite;
+  z-index: 10;
+}
+
+@keyframes scan-sweep {
+  0% {
+    top: 0%;
+  }
+  50% {
+    top: 100%;
+  }
+  100% {
+    top: 0%;
+  }
+}
+
+.pulse-glow {
+  animation: pulse-glow-anim 2s infinite ease-in-out;
+}
+
+@keyframes pulse-glow-anim {
+  0%, 100% {
+    opacity: 0.2;
+    box-shadow: inset 0 0 15px rgba(30, 111, 217, 0.1);
+  }
+  50% {
+    opacity: 0.6;
+    box-shadow: inset 0 0 30px rgba(30, 111, 217, 0.3);
+  }
+}
+
+.glitch-text {
+  text-shadow: 0 0 4px rgba(42, 127, 239, 0.4);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .hero-title-cycle,
   .noise-border::after,
   .water-fill,
-  .water-fill::after { animation: none; }
+  .water-fill::after,
+  .scan-beam,
+  .pulse-glow { animation: none; }
   .hero-title-cycle { color: #fff; }
+  .scan-beam { top: 50%; }
 }
+

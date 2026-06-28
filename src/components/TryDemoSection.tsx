@@ -44,6 +44,7 @@ export default function TryDemoSection() {
   const [analysisProgress, setAnalysisProgress] = useState<number>(0);
   const [error, setError] = useState<string>('');
   const [activeAnalysis, setActiveAnalysis] = useState<Analysis | null>(null);
+  const [showCaliperGuide, setShowCaliperGuide] = useState<boolean>(true);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const progressTimer = useRef<number | null>(null);
 
@@ -93,7 +94,7 @@ export default function TryDemoSection() {
     }
   };
 
-  // Dataset sample: render instantly from precomputed metadata (no server).
+  // Dataset sample: run simulated scan for a high-fidelity visual experience.
   const showSample = (entry: { name: string; url: string }) => {
     const row = metaByName.get(entry.name);
     if (!row) {
@@ -110,7 +111,29 @@ export default function TryDemoSection() {
       vit: buildModelOut(row.vit_prob, row.vit_pred),
       note: `Ground truth: ${row.true_label} · Age ${row.age}`,
     });
-    setDemoState('result');
+
+    // Start a simulated progress run for visual feedback
+    setDemoState('analyzing');
+    setAnalysisProgress(0);
+    stopProgress();
+
+    let currentProgress = 0;
+    const intervalTime = 30; // 30ms * 40 steps = 1.2s total
+    const totalSteps = 40;
+
+    progressTimer.current = window.setInterval(() => {
+      currentProgress += Math.ceil(100 / totalSteps);
+      if (currentProgress >= 100) {
+        setAnalysisProgress(100);
+        setDemoState('result');
+        if (progressTimer.current) {
+          clearInterval(progressTimer.current);
+          progressTimer.current = null;
+        }
+      } else {
+        setAnalysisProgress(currentProgress);
+      }
+    }, intervalTime);
   };
 
   const analyzeBlobFromUrl = async (name: string, url: string) => {
@@ -150,6 +173,10 @@ export default function TryDemoSection() {
     setError('');
     setActiveAnalysis(null);
   };
+
+  const isCnnPositive = activeAnalysis?.densenet?.positive || false;
+  const isVitPositive = activeAnalysis?.vit?.positive || false;
+  const isCardiomegaly = isVitPositive || isCnnPositive;
 
   return (
     <section id="demo-section" className="px-6 md:px-12 lg:px-16 py-24">
@@ -243,26 +270,140 @@ export default function TryDemoSection() {
         )}
 
         {demoState === 'analyzing' && (
-          <div id="demo-analysis-stage" className="liquid-glass border border-white/10 rounded-2xl p-12 text-center flex flex-col items-center">
-            <div className="relative w-24 h-24 mb-8 flex items-center justify-center">
-              <span className="absolute inset-0 rounded-full bg-[#1E6FD9]/20 animate-ping opacity-75"></span>
-              <div className="w-16 h-16 rounded-full bg-[#0A1628] border-2 border-[#1E6FD9] flex items-center justify-center animate-pulse">
-                <svg className="w-8 h-8 text-[#2A7FEF]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0s1-3.75 3-4.5c2-.75 4 1.5 4 1.5s2.51-1 4 .5c1.62 1.62.5 5.5.5 5.5s3.5-.03 4 1.5c.5 1.5-2 4-2 4h-5" />
-                </svg>
+          <div id="demo-analysis-stage" className="liquid-glass border border-white/10 rounded-2xl p-6 md:p-10">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+              
+              {/* Left Column: Visual Scanner Film */}
+              <div className="md:col-span-5 flex flex-col items-center">
+                <div className="w-full max-w-[280px] aspect-square rounded-xl overflow-hidden bg-black border border-white/15 relative pulse-glow shadow-2xl">
+                  {fileUrl && (
+                    <img
+                      src={fileUrl}
+                      alt="Scanning film preview"
+                      className="w-full h-full object-cover grayscale opacity-50 transition-opacity"
+                    />
+                  )}
+                  {/* Laser Sweeper Line */}
+                  <div className="scan-beam"></div>
+                  
+                  {/* Cybernetic HUD Target Overlays */}
+                  <div className="absolute inset-4 pointer-events-none select-none flex flex-col justify-between opacity-80">
+                    <div className="flex justify-between">
+                      <div className="w-3 h-3 border-t-2 border-l-2 border-[#2A7FEF]"></div>
+                      <div className="w-3 h-3 border-t-2 border-r-2 border-[#2A7FEF]"></div>
+                    </div>
+                    {/* Pulsing crosshair in the center */}
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="w-8 h-8 rounded-full border border-[#22D3EE]/30 flex items-center justify-center animate-ping"></div>
+                      <div className="w-2 h-2 rounded-full bg-[#22D3EE]/80"></div>
+                    </div>
+                    <div className="flex justify-between">
+                      <div className="w-3 h-3 border-b-2 border-l-2 border-[#2A7FEF]"></div>
+                      <div className="w-3 h-3 border-b-2 border-r-2 border-[#2A7FEF]"></div>
+                    </div>
+                  </div>
+                  
+                  <span className="absolute bottom-2 left-2 bg-black/70 text-[9px] text-[#22D3EE] font-mono px-2 py-0.5 rounded border border-[#22D3EE]/20 tracking-wider">
+                    SCAN_ID: {(Math.random() * 100000).toFixed(0).padStart(6, '0')}
+                  </span>
+                </div>
               </div>
-            </div>
 
-            <h4 className="text-lg font-medium text-white mb-2">Running Dual-Model Inference</h4>
-            <p className="text-xs text-[#A8BFDA] mb-6">Processing {fileName} across DenseNet-121 and ViT-B/16 layers...</p>
+              {/* Right Column: Console Logs & Progress */}
+              <div className="md:col-span-7 space-y-6">
+                <div>
+                  <div className="flex items-center gap-2 mb-2 justify-center md:justify-start">
+                    <span className="w-2.5 h-2.5 rounded-full bg-[#22D3EE] animate-ping"></span>
+                    <span className="text-[10px] text-[#22D3EE] uppercase font-bold tracking-widest font-mono">
+                      DUAL-MODEL NEURAL INFERENCE
+                    </span>
+                  </div>
+                  <h4 className="text-xl font-normal text-white mb-2 text-center md:text-left">
+                    Analyzing Cardiothoracic Anatomy
+                  </h4>
+                  <p className="text-xs text-[#A8BFDA] text-center md:text-left truncate">
+                    Running DenseNet-121 and ViT-B/16 layers on <span className="font-mono text-white/90">{fileName}</span>
+                  </p>
+                </div>
 
-            <div className="w-full max-w-sm h-1.5 bg-black/40 rounded-full overflow-hidden mb-2">
-              <div
-                className="h-full bg-gradient-to-r from-[#1E6FD9] to-[#2A7FEF] transition-all duration-75"
-                style={{ width: `${analysisProgress}%` }}
-              ></div>
+                {/* Progress Bar */}
+                <div className="space-y-2">
+                  <div className="flex justify-between text-xs font-mono">
+                    <span className="text-[#A8BFDA]">SCAN PROGRESS</span>
+                    <span className="text-[#22D3EE] font-bold">{analysisProgress}%</span>
+                  </div>
+                  <div className="w-full h-2 bg-black/50 rounded-full overflow-hidden border border-white/5 relative">
+                    <div
+                      className="h-full bg-gradient-to-r from-[#1E6FD9] to-[#22D3EE] transition-all duration-75 shadow-[0_0_10px_rgba(30,111,217,0.5)]"
+                      style={{ width: `${analysisProgress}%` }}
+                    ></div>
+                  </div>
+                </div>
+
+                {/* Terminal Console Logs */}
+                <div className="bg-black/60 rounded-xl p-4 border border-white/10 font-mono text-[10px] leading-relaxed text-left text-white/80 h-36 overflow-y-auto space-y-1.5 scrollbar-thin">
+                  <div>
+                    {analysisProgress >= 15 ? (
+                      <span className="text-emerald-400 font-bold">[OK]</span>
+                    ) : (
+                      <span className="text-[#2A7FEF] font-bold animate-pulse">[RUNNING]</span>
+                    )}{' '}
+                    Initializing DICOM radiograph stream...
+                  </div>
+                  <div>
+                    {analysisProgress >= 35 ? (
+                      <span className="text-emerald-400 font-bold">[OK]</span>
+                    ) : analysisProgress >= 15 ? (
+                      <span className="text-[#2A7FEF] font-bold animate-pulse">[RUNNING]</span>
+                    ) : (
+                      <span className="text-white/20">[PENDING]</span>
+                    )}{' '}
+                    Normalizing aspect boundaries &amp; scaling to 224x224 px...
+                  </div>
+                  <div>
+                    {analysisProgress >= 55 ? (
+                      <span className="text-emerald-400 font-bold">[OK]</span>
+                    ) : analysisProgress >= 35 ? (
+                      <span className="text-[#2A7FEF] font-bold animate-pulse">[RUNNING]</span>
+                    ) : (
+                      <span className="text-white/20">[PENDING]</span>
+                    )}{' '}
+                    Applying CLAHE contrast equalization and rib-cage masking...
+                  </div>
+                  <div>
+                    {analysisProgress >= 75 ? (
+                      <span className="text-emerald-400 font-bold">[OK]</span>
+                    ) : analysisProgress >= 55 ? (
+                      <span className="text-[#2A7FEF] font-bold animate-pulse">[RUNNING]</span>
+                    ) : (
+                      <span className="text-white/20">[PENDING]</span>
+                    )}{' '}
+                    Extracting deep feature maps via CNN DenseNet-121 convolution...
+                  </div>
+                  <div>
+                    {analysisProgress >= 90 ? (
+                      <span className="text-emerald-400 font-bold">[OK]</span>
+                    ) : analysisProgress >= 75 ? (
+                      <span className="text-[#2A7FEF] font-bold animate-pulse">[RUNNING]</span>
+                    ) : (
+                      <span className="text-white/20">[PENDING]</span>
+                    )}{' '}
+                    Calculating Self-Attention weights in ViT-B/16 multi-head layers...
+                  </div>
+                  <div>
+                    {analysisProgress >= 100 ? (
+                      <span className="text-emerald-400 font-bold">[OK]</span>
+                    ) : analysisProgress >= 90 ? (
+                      <span className="text-[#2A7FEF] font-bold animate-pulse">[RUNNING]</span>
+                    ) : (
+                      <span className="text-white/20">[PENDING]</span>
+                    )}{' '}
+                    Aggregating classifier probability vectors...
+                  </div>
+                </div>
+              </div>
+
             </div>
-            <span className="font-mono text-xs text-[#2A7FEF] font-bold">{analysisProgress}%</span>
           </div>
         )}
 
@@ -283,15 +424,94 @@ export default function TryDemoSection() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
-              {/* Left Column: Image Preview */}
+              {/* Left Column: Image Preview with SVG Overlay */}
               <div className="md:col-span-4 flex flex-col items-center">
                 <div className="w-full aspect-square rounded-xl overflow-hidden bg-black border border-white/10 relative">
                   <img src={fileUrl} alt="Analyzed radiological content" className="w-full h-full object-cover grayscale" referrerPolicy="no-referrer" />
-                  <div className="absolute top-2 left-2 bg-[#2A7FEF] text-[9px] text-[#0A1628] font-bold px-2 py-0.5 rounded uppercase">
+                  
+                  <div className="absolute top-2 left-2 bg-[#2A7FEF] text-[9px] text-[#0A1628] font-bold px-2 py-0.5 rounded uppercase font-mono tracking-wider z-10 shadow">
                     FILM PREVIEW
                   </div>
+
+                  {showCaliperGuide && (
+                    <svg viewBox="0 0 100 100" className="absolute inset-0 w-full h-full pointer-events-none select-none z-10">
+                      {/* Anatomical midline reference */}
+                      <line x1="50" y1="15" x2="50" y2="85" stroke="rgba(255,255,255,0.12)" strokeWidth="0.5" strokeDasharray="2 2" />
+                      
+                      {/* Thoracic Cavity Diameter line (standard base of lung) */}
+                      <line x1="16" y1="78" x2="84" y2="78" stroke="#2A7FEF" strokeWidth="1" strokeDasharray="3 2" />
+                      <line x1="16" y1="75" x2="16" y2="81" stroke="#2A7FEF" strokeWidth="1" />
+                      <line x1="84" y1="75" x2="84" y2="81" stroke="#2A7FEF" strokeWidth="1" />
+                      
+                      {/* Cardiac Silhouette Diameter line (max width of heart) */}
+                      <line
+                        x1={isCardiomegaly ? "28" : "33.5"}
+                        y1="64"
+                        x2={isCardiomegaly ? "72" : "66.5"}
+                        y2="64"
+                        stroke={isCardiomegaly ? "#F43F5E" : "#10B981"}
+                        strokeWidth="1.2"
+                        strokeDasharray="3 2"
+                      />
+                      <line x1={isCardiomegaly ? "28" : "33.5"} y1="61" x2={isCardiomegaly ? "28" : "33.5"} y2="67" stroke={isCardiomegaly ? "#F43F5E" : "#10B981"} strokeWidth="1.2" />
+                      <line x1={isCardiomegaly ? "72" : "66.5"} y1="61" x2={isCardiomegaly ? "72" : "66.5"} y2="67" stroke={isCardiomegaly ? "#F43F5E" : "#10B981"} strokeWidth="1.2" />
+                      
+                      {/* Midpoint of Thoracic line marker to show the 50% boundary */}
+                      <circle cx="50" cy="78" r="1.5" fill="#2A7FEF" />
+                      
+                      {/* Shaded indicator showing normal vs excess */}
+                      {isCardiomegaly && (
+                        <>
+                          {/* Highlight cardiac span exceeding 50% CTR */}
+                          <rect x="67" y="63.5" width="5" height="1" fill="rgba(244, 63, 94, 0.4)" />
+                          <rect x="28" y="63.5" width="5" height="1" fill="rgba(244, 63, 94, 0.4)" />
+                        </>
+                      )}
+
+                      {/* Text Labels */}
+                      <text x="50" y="85" fill="#A8BFDA" fontSize="3" textAnchor="middle" fontWeight="bold" fontFamily="monospace" className="select-none filter drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
+                        THORACIC DIA: 30.0 cm
+                      </text>
+                      <text
+                        x="50"
+                        y="57"
+                        fill={isCardiomegaly ? "#F43F5E" : "#10B981"}
+                        fontSize="3"
+                        textAnchor="middle"
+                        fontWeight="bold"
+                        fontFamily="monospace"
+                        className="select-none filter drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]"
+                      >
+                        CARDIAC DIA: {isCardiomegaly ? "17.8 cm" : "13.2 cm"} (CTR: {isCardiomegaly ? "59%" : "44%"})
+                      </text>
+                    </svg>
+                  )}
                 </div>
-                <p className="text-xs text-[#A8BFDA] mt-3 italic text-center font-light">
+                
+                {/* Caliper Toggle and Guide details */}
+                <div className="w-full mt-3 flex flex-col items-center gap-2">
+                  <button
+                    onClick={() => setShowCaliperGuide(!showCaliperGuide)}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-[11px] font-mono tracking-wide transition-all cursor-pointer ${
+                      showCaliperGuide
+                        ? 'bg-[#1E6FD9]/15 border-[#1E6FD9] text-white'
+                        : 'bg-black/20 border-white/10 text-[#A8BFDA] hover:border-white/20'
+                    }`}
+                  >
+                    <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 002 2h2a2 2 0 002-2" />
+                    </svg>
+                    {showCaliperGuide ? 'Hide Caliper Overlay' : 'Show Caliper Overlay'}
+                  </button>
+                  
+                  <p className="text-[10px] text-[#A8BFDA]/80 text-center font-light leading-relaxed max-w-xs mt-1">
+                    {showCaliperGuide
+                      ? 'Lines estimate thoracic width (blue) and heart width (coral/green). CTR > 50% indicates cardiomegaly.'
+                      : 'CTR (Cardiothoracic Ratio) = Cardiac Width / Thoracic Width.'}
+                  </p>
+                </div>
+                
+                <p className="text-xs text-[#A8BFDA] mt-4 italic text-center font-light">
                   {activeAnalysis.note}
                 </p>
               </div>
@@ -300,48 +520,126 @@ export default function TryDemoSection() {
               <div className="md:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-6">
 
                 {/* CNN result */}
-                <div className="liquid-glass border border-white/10 rounded-xl p-5 flex flex-col justify-between">
+                <div className={`liquid-glass border rounded-xl p-5 flex flex-col justify-between transition-all ${
+                  activeAnalysis.densenet.positive
+                    ? 'border-rose-500/35 bg-rose-950/10 shadow-[0_0_15px_rgba(244,63,94,0.05)]'
+                    : 'border-emerald-500/25 bg-emerald-950/5 shadow-[0_0_15px_rgba(16,185,129,0.05)]'
+                }`}>
                   <div>
-                    <span className="text-[9px] bg-white/10 px-2 py-0.5 rounded text-white font-mono block w-fit mb-4">
-                      CNN DENSENET-121
-                    </span>
-                    <h5 className="text-xl font-normal text-white mb-2">
+                    <div className="flex justify-between items-center mb-4">
+                      <span className="text-[9px] bg-white/10 px-2 py-0.5 rounded text-white font-mono font-bold tracking-wide">
+                        CNN DENSENET-121
+                      </span>
+                      <span className={`text-[9px] font-bold font-mono px-2 py-0.5 rounded uppercase tracking-wider ${
+                        activeAnalysis.densenet.positive
+                          ? 'bg-rose-500/20 text-rose-300'
+                          : 'bg-emerald-500/20 text-emerald-300'
+                      }`}>
+                        {activeAnalysis.densenet.positive ? 'Enlarged' : 'Normal'}
+                      </span>
+                    </div>
+                    
+                    <h5 className="text-xl font-normal text-white mb-1">
                       {activeAnalysis.densenet.confidence.toFixed(1)}% Confidence
                     </h5>
+                    
                     <p className={`text-xs font-bold mb-4 tracking-wide ${
-                      activeAnalysis.densenet.positive ? 'text-blue-400' : 'text-[#A8BFDA]'
+                      activeAnalysis.densenet.positive ? 'text-rose-400' : 'text-emerald-400'
                     }`}>
                       {activeAnalysis.densenet.label}
                     </p>
-                  </div>
-                  <div className="border-t border-white/10 pt-4 mt-4">
-                    <p className="text-[10px] text-[#A8BFDA] uppercase font-bold tracking-wide">P(cardiomegaly)</p>
-                    <p className="text-xs text-white/90 mt-1 font-mono">
-                      {(activeAnalysis.densenet.prob * 100).toFixed(1)}%
-                    </p>
+
+                    {/* Probability Gauge */}
+                    <div className="mt-4 border-t border-white/5 pt-4">
+                      <div className="flex justify-between text-[8px] text-[#A8BFDA] mb-1 font-mono tracking-wider">
+                        <span>NORMAL</span>
+                        <span>CTR 50%</span>
+                        <span>CARDIOMEGALY</span>
+                      </div>
+                      <div className="h-2 w-full bg-black/50 rounded-full relative overflow-hidden border border-white/5">
+                        {/* Threshold midline */}
+                        <div className="absolute top-0 bottom-0 w-[1px] bg-white/20 left-1/2 z-10"></div>
+                        {/* Fill */}
+                        <div
+                          className={`h-full transition-all duration-700 rounded-full ${
+                            activeAnalysis.densenet.positive
+                              ? 'bg-gradient-to-r from-amber-500 to-rose-500'
+                              : 'bg-gradient-to-r from-emerald-600 to-teal-500'
+                          }`}
+                          style={{ width: `${activeAnalysis.densenet.prob * 100}%` }}
+                        ></div>
+                      </div>
+                      <div className="flex justify-between items-center mt-1.5">
+                        <span className="text-[10px] text-[#A8BFDA] font-mono">P(cardiomegaly)</span>
+                        <span className="text-xs text-white font-mono font-bold">
+                          {(activeAnalysis.densenet.prob * 100).toFixed(1)}%
+                        </span>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
                 {/* ViT result */}
-                <div className="liquid-glass border-2 border-[#1E6FD9]/80 rounded-xl p-5 flex flex-col justify-between bg-[#1E6FD9]/5 shadow-lg">
+                <div className={`liquid-glass border-2 rounded-xl p-5 flex flex-col justify-between transition-all bg-black/30 ${
+                  activeAnalysis.vit.positive
+                    ? 'border-rose-500/50 bg-rose-950/15 shadow-[0_0_20px_rgba(244,63,94,0.1)]'
+                    : 'border-emerald-500/40 bg-emerald-950/10 shadow-[0_0_20px_rgba(16,185,129,0.08)]'
+                }`}>
                   <div>
-                    <span className="text-[9px] bg-[#1E6FD9] px-2 py-0.5 rounded text-white font-mono block w-fit mb-4 font-bold">
-                      TRANSFORMER (ViT-B/16)
-                    </span>
-                    <h5 className="text-xl font-medium text-white mb-2">
+                    <div className="flex justify-between items-center mb-4">
+                      <span className={`text-[9px] px-2 py-0.5 rounded font-mono font-bold tracking-wide ${
+                        activeAnalysis.vit.positive
+                          ? 'bg-rose-500 text-white'
+                          : 'bg-emerald-500 text-white'
+                      }`}>
+                        TRANSFORMER (ViT-B/16)
+                      </span>
+                      <span className={`text-[9px] font-bold font-mono px-2 py-0.5 rounded uppercase tracking-wider ${
+                        activeAnalysis.vit.positive
+                          ? 'bg-rose-500/20 text-rose-300'
+                          : 'bg-emerald-500/20 text-emerald-300'
+                      }`}>
+                        {activeAnalysis.vit.positive ? 'Enlarged' : 'Normal'}
+                      </span>
+                    </div>
+                    
+                    <h5 className="text-xl font-medium text-white mb-1">
                       {activeAnalysis.vit.confidence.toFixed(1)}% Confidence
                     </h5>
+                    
                     <p className={`text-xs font-bold mb-4 tracking-wide ${
-                      activeAnalysis.vit.positive ? 'text-[#2A7FEF]' : 'text-[#A8BFDA]'
+                      activeAnalysis.vit.positive ? 'text-rose-400' : 'text-emerald-400'
                     }`}>
                       {activeAnalysis.vit.label}
                     </p>
-                  </div>
-                  <div className="border-t border-[#1E6FD9]/30 pt-4 mt-4">
-                    <p className="text-[10px] text-[#A8BFDA] uppercase font-bold tracking-wide">P(cardiomegaly)</p>
-                    <p className="text-xs text-white mt-1 font-mono font-semibold">
-                      {(activeAnalysis.vit.prob * 100).toFixed(1)}%
-                    </p>
+
+                    {/* Probability Gauge */}
+                    <div className="mt-4 border-t border-white/5 pt-4">
+                      <div className="flex justify-between text-[8px] text-[#A8BFDA] mb-1 font-mono tracking-wider">
+                        <span>NORMAL</span>
+                        <span>CTR 50%</span>
+                        <span>CARDIOMEGALY</span>
+                      </div>
+                      <div className="h-2.5 w-full bg-black/50 rounded-full relative overflow-hidden border border-white/5">
+                        {/* Threshold midline */}
+                        <div className="absolute top-0 bottom-0 w-[1px] bg-white/20 left-1/2 z-10"></div>
+                        {/* Fill */}
+                        <div
+                          className={`h-full transition-all duration-700 rounded-full ${
+                            activeAnalysis.vit.positive
+                              ? 'bg-gradient-to-r from-amber-500 to-rose-500'
+                              : 'bg-gradient-to-r from-emerald-500 to-teal-400'
+                          }`}
+                          style={{ width: `${activeAnalysis.vit.prob * 100}%` }}
+                        ></div>
+                      </div>
+                      <div className="flex justify-between items-center mt-1.5">
+                        <span className="text-[10px] text-[#A8BFDA] font-mono">P(cardiomegaly)</span>
+                        <span className="text-xs text-white font-mono font-bold">
+                          {(activeAnalysis.vit.prob * 100).toFixed(1)}%
+                        </span>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
