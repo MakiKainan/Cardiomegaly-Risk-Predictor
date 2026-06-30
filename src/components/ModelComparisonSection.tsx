@@ -17,32 +17,32 @@ export default function ModelComparisonSection() {
   const metrics: Metric[] = [
     {
       name: 'AUC-ROC',
-      cnn: 0.8229,
-      vit: 0.8483,
+      cnn: 0.8152,
+      vit: 0.8451,
       description: 'The overall discriminative ability of the model'
     },
     {
       name: 'Accuracy',
-      cnn: 0.7473,
-      vit: 0.7834,
+      cnn: 0.7004,
+      vit: 0.7653,
       description: 'Overall proportion of correct classifications'
     },
     {
       name: 'Precision',
-      cnn: 0.7619,
-      vit: 0.7547,
+      cnn: 0.6325,
+      vit: 0.6870,
       description: 'Ability to avoid false positives (positive predictive value)'
     },
     {
       name: 'Recall',
-      cnn: 0.5614,
-      vit: 0.7018,
+      cnn: 0.6491,
+      vit: 0.7895,
       description: 'Ability to detect cardiac abnormalities (sensitivity)'
     },
     {
       name: 'F1 Score',
-      cnn: 0.6465,
-      vit: 0.7273,
+      cnn: 0.6407,
+      vit: 0.7347,
       description: 'Harmonic mean of precision and recall'
     }
   ];
@@ -166,23 +166,23 @@ export default function ModelComparisonSection() {
             <div className="border-t border-white/10 pt-6">
               <div className="grid grid-cols-5 gap-2 text-center">
                 <div>
-                  <div className="text-base font-semibold text-white">0.7473</div>
+                  <div className="text-base font-semibold text-white">0.7004</div>
                   <div className="text-[10px] text-[#A8BFDA]">Accuracy</div>
                 </div>
                 <div>
-                  <div className="text-base font-semibold text-white">0.7619</div>
+                  <div className="text-base font-semibold text-white">0.6325</div>
                   <div className="text-[10px] text-[#A8BFDA]">Precision</div>
                 </div>
                 <div>
-                  <div className="text-base font-semibold text-white">0.5614</div>
+                  <div className="text-base font-semibold text-white">0.6491</div>
                   <div className="text-[10px] text-[#A8BFDA]">Recall</div>
                 </div>
                 <div>
-                  <div className="text-base font-semibold text-white">0.6465</div>
+                  <div className="text-base font-semibold text-white">0.6407</div>
                   <div className="text-[10px] text-[#A8BFDA]">F1 Score</div>
                 </div>
                 <div>
-                  <div className="text-base font-semibold text-[#1E6FD9]">0.8229</div>
+                  <div className="text-base font-semibold text-[#1E6FD9]">0.8152</div>
                   <div className="text-[10px] text-[#1E6FD9] font-medium">AUC-ROC</div>
                 </div>
               </div>
@@ -212,23 +212,23 @@ export default function ModelComparisonSection() {
             <div className="border-t border-[#1E6FD9]/30 pt-6">
               <div className="grid grid-cols-5 gap-2 text-center">
                 <div>
-                  <div className="text-base font-bold text-white">0.7834</div>
+                  <div className="text-base font-bold text-white">0.7653</div>
                   <div className="text-[10px] text-white">Accuracy</div>
                 </div>
                 <div>
-                  <div className="text-base font-bold text-white">0.7547</div>
+                  <div className="text-base font-bold text-white">0.6870</div>
                   <div className="text-[10px] text-white">Precision</div>
                 </div>
                 <div>
-                  <div className="text-base font-bold text-white">0.7018</div>
+                  <div className="text-base font-bold text-white">0.7895</div>
                   <div className="text-[10px] text-white">Recall</div>
                 </div>
                 <div>
-                  <div className="text-base font-bold text-white">0.7273</div>
+                  <div className="text-base font-bold text-white">0.7347</div>
                   <div className="text-[10px] text-white">F1 Score</div>
                 </div>
                 <div>
-                  <div className="text-base font-extrabold text-[#2A7FEF]">0.8483</div>
+                  <div className="text-base font-extrabold text-[#2A7FEF]">0.8451</div>
                   <div className="text-[10px] text-[#2A7FEF] font-semibold">AUC-ROC</div>
                 </div>
               </div>

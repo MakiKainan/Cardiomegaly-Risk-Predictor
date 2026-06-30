@@ -7,3 +7,4 @@ coverage/
 .env*
 !.env.example
 to-do.md
+.vite/

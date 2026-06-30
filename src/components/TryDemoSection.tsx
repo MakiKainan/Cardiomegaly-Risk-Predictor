@@ -62,8 +62,13 @@ export default function TryDemoSection() {
     }
   };
 
-  // Upload / drop / fallback path: run the real models via the local server.
-  const analyzeBlob = async (name: string, blob: Blob, url: string) => {
+  // Upload / drop / sample path: run live inference via the Gemini server.
+  const analyzeBlob = async (
+    name: string,
+    blob: Blob,
+    url: string,
+    note = 'Live inference · DenseNet-121 + ViT-B/16',
+  ) => {
     setError('');
     setFileName(name);
     setFileUrl(url);
@@ -80,7 +85,7 @@ export default function TryDemoSection() {
         previewUrl: url,
         densenet: buildModelOut(j.densenet.prob, j.densenet.label),
         vit: buildModelOut(j.vit.prob, j.vit.label),
-        note: 'Live inference · DenseNet-121 + ViT-B/16',
+        note,
       });
       setAnalysisProgress(100);
       setDemoState('result');
@@ -94,51 +99,23 @@ export default function TryDemoSection() {
     }
   };
 
-  // Dataset sample: run simulated scan for a high-fidelity visual experience.
+  // Dataset sample: run live Gemini inference, tagging the result with the
+  // sample's ground truth (from metadata.json) when we have it.
   const showSample = (entry: { name: string; url: string }) => {
     const row = metaByName.get(entry.name);
-    if (!row) {
-      void analyzeBlobFromUrl(entry.name, entry.url); // fallback to live model
-      return;
-    }
-    setError('');
-    setFileName(entry.name);
-    setFileUrl(entry.url);
-    setActiveAnalysis({
-      name: entry.name,
-      previewUrl: entry.url,
-      densenet: buildModelOut(row.cnn_prob, row.cnn_pred),
-      vit: buildModelOut(row.vit_prob, row.vit_pred),
-      note: `Ground truth: ${row.true_label} · Age ${row.age}`,
-    });
-
-    // Start a simulated progress run for visual feedback
-    setDemoState('analyzing');
-    setAnalysisProgress(0);
-    stopProgress();
-
-    let currentProgress = 0;
-    const intervalTime = 30; // 30ms * 40 steps = 1.2s total
-    const totalSteps = 40;
-
-    progressTimer.current = window.setInterval(() => {
-      currentProgress += Math.ceil(100 / totalSteps);
-      if (currentProgress >= 100) {
-        setAnalysisProgress(100);
-        setDemoState('result');
-        if (progressTimer.current) {
-          clearInterval(progressTimer.current);
-          progressTimer.current = null;
-        }
-      } else {
-        setAnalysisProgress(currentProgress);
-      }
-    }, intervalTime);
+    const note = row
+      ? `Ground truth: ${row.true_label} · Age ${row.age} · live inference`
+      : undefined;
+    void analyzeBlobFromUrl(entry.name, entry.url, note);
   };
 
-  const analyzeBlobFromUrl = async (name: string, url: string) => {
+  const analyzeBlobFromUrl = async (
+    name: string,
+    url: string,
+    note?: string,
+  ) => {
     const blob = await fetch(url).then((r) => r.blob());
-    await analyzeBlob(name, blob, url);
+    await analyzeBlob(name, blob, url, note);
   };
 
   const handleDrag = (e: React.DragEvent) => {
@@ -651,8 +628,8 @@ export default function TryDemoSection() {
         {/* Info label at bottom */}
         <div id="demo-disclaimer" className="text-center mt-12">
           <p id="demo-coming-soon-warning" className="text-sm text-[#A8BFDA]/60 italic font-light">
-            Sample results are precomputed from the trained models; uploads run live against the
-            local inference server. For research and education only — not a medical device.
+            Samples and uploads both run live against the inference server. For research and
+            education only — not a medical device.
           </p>
         </div>
       </div>
