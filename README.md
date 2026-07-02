@@ -45,6 +45,4 @@ npm run preview  # preview the production build
 npm run lint     # type-check (tsc --noEmit)
 ```
 
-### Gemini API key (optional)
 
-The app runs fully without any API key — the demo is simulated locally. A `GEMINI_API_KEY` (see [.env.example](.env.example)) is only scaffolding for a future server-side Gemini integration and is not currently used by the app.
